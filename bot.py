@@ -6,9 +6,6 @@ import requests
 from nonebot.exception import FinishedException
 from . import chatglm
 
-'''给定一个话题, 让聊天机器人之间自己聊天'''
-
-
 class AutoChatBots():
     def __init__(self, bc):
         self.supported_bots = {
@@ -21,17 +18,19 @@ class AutoChatBots():
             '思知机器人': self.ownthink,
             '青云客智能聊天机器人': self.qingyunke,
         }
-        # test 添加chatglm
-        _bot = chatglm.bot()
-        self.supported_bots['ChatGlm'] = _bot.run
+        # # test 添加chatglm
+        # _bot = chatglm.bot()
+        # self.supported_bots['ChatGlm'] = _bot.run
+        # self.bot_name = 'ChatGlm'
 
-        # self.bot_name = random.choice(list(self.supported_bots.keys()))
-        self.bot_name = 'ChatGlm'
+        # 默认随机获取一个机器人
+        self.bot_name = random.choice(list(self.supported_bots.keys()))
+        
         self.bc = bc
         # 是否开始，防止多次输入
         self.isStart = False
-    '''运行'''
     async def run(self, topic):
+        '''运行'''
         if not self.isStart:
             self.isStart = True
             bot_name = self.bot_name
@@ -46,9 +45,9 @@ class AutoChatBots():
                 self.isStart = False
                 raise FinishedException
         raise FinishedException
-    '''思知机器人API'''
 
     def ownthink(self, sentence, need_say=True):
+        '''思知机器人API'''
         # 在https://www.ownthink.com/可以申请app_keys
         app_keys = [
             'xiaosi',
@@ -92,9 +91,9 @@ class AutoChatBots():
     #         reply = response.json()['result']['intents'][0]['result']['text']
     #         if need_say: self.say(reply)
     #         return reply
-    '''天行机器人API'''
 
     def tian(self, sentence, need_say=True):
+        '''天行机器人API'''
         # 在https://www.tianapi.com/apiview/47可以申请app_keys
         app_keys = [
             (random.randrange(1, 9999), '16e2471e7a72f1e9dca46b2a80486c7d'),
@@ -120,9 +119,8 @@ class AutoChatBots():
             reply = response.json()['newslist'][0]['reply']
             # if need_say: self.say(reply)
             return reply
-    '''青云客智能聊天机器人API'''
-
     def qingyunke(self, sentence, need_say=True):
+        '''青云客智能聊天机器人API'''
         while True:
             url = 'http://api.qingyunke.com/api.php?key=free&appid=0&msg=%s'
             response = requests.get(url % sentence)
@@ -132,8 +130,9 @@ class AutoChatBots():
             reply = response.json()['content']
             # if need_say: self.say(reply)
             return reply
-    '''图灵机器人API'''
+    
     # def turing(self, sentence, need_say=True):
+    #     '''图灵机器人API'''
     #     # 在http://www.tuling123.com/可以申请appkeys
     #     appkeys = [
     #         'f0a5ab746c7d41c48a733cabff23fb6d',
@@ -160,14 +159,14 @@ class AutoChatBots():
     #             continue
     #         if need_say: self.say(reply)
     #         return reply
-    '''过滤非中文内容'''
     # def filter(self, sentence):
+    #     '''过滤非中文内容'''
     #     sentence_clean = ''
     #     for c in sentence:
     #         if '\u4e00' <= c <= '\u9fa5': sentence_clean += c
     #     return sentence_clean
-    '''说话'''
     # def say(self, content):
+    #     '''说话'''
     #     if random.random() > 0.5:
     #         os.system('mshta vbscript:createobject("sapi.spvoice").speak("%s")(window.close)' % content)
     #     else:
@@ -175,7 +174,6 @@ class AutoChatBots():
     # def chatGlm(self, content):
     #     return chatglm.run(text=content)
     # 切换
-
     def switch(self, key=None):
         aiList = self.supported_bots  # type: list
         if len(aiList) > 1:
