@@ -1,0 +1,2 @@
+# nonebot2_plugins_simpleBot_wt
+nonebot2简单机器人，基于nonebot v11适配器，监听用户收到信息，然后回复对应用户
